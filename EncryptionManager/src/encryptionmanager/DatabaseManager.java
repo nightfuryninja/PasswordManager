@@ -8,11 +8,11 @@ import java.sql.Statement;
 public class DatabaseManager {
 
     private Connection conn;
-    
-    public DatabaseManager(){
+
+    public DatabaseManager() {
         ConnectToDatabase();
     }
-    
+
     //Connects to the database.
     private void ConnectToDatabase() {
         try {
@@ -48,4 +48,15 @@ public class DatabaseManager {
         }
     }
 
+    //Updates an existing row (using ID) in the database.
+    public void UpdateRow(String[] args) {
+        String command = String.format("UPDATE accounts SET {0} = {1} WHERE id  = {3};", args);
+        try {
+            Statement statement = conn.createStatement();
+            statement.execute(command);
+            System.out.println("Updated");
+        } catch (SQLException ex) {
+            System.out.println("An SQL exception occured.");
+        }
+    }
 }
