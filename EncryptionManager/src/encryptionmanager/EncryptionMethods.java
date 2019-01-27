@@ -3,24 +3,14 @@ package encryptionmanager;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Scanner;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class EncryptionManager {
+public class EncryptionMethods {
 
-    //TODO LIST:
-    //1) Create option for password to contain different characters.
-    //2) Store passwords within an encrypted database.
-    //3) Create a pretty GUI that looks all fancy and modern.
-    public static Scanner input = new Scanner(System.in);
-    private static SecureRandom generator = new SecureRandom();
-
-    public static void main(String[] args) {
-        
-    }
+    public static SecureRandom generator = new SecureRandom();
 
     //Generates a secure random salt (256 bits / 32 bytes in length).
     public static byte[] GenerateSalt(int Size) {
@@ -47,7 +37,7 @@ public class EncryptionManager {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, keySpec);
         } catch (Exception e) {
-            
+
         }
     }
 
@@ -67,4 +57,5 @@ public class EncryptionManager {
             return null;
         }
     }
+    
 }
