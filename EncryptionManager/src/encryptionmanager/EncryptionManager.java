@@ -10,10 +10,4 @@ public class EncryptionManager {
     //3) Create a pretty GUI that looks all fancy and modern.
     public static Scanner input = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        // Hello World
-    }
-    
-    
-
 }
