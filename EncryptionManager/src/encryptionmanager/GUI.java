@@ -3,8 +3,6 @@ package encryptionmanager;
 import java.awt.CardLayout;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GUI extends javax.swing.JFrame {
 
@@ -251,7 +249,7 @@ public class GUI extends javax.swing.JFrame {
         char[] password = registerPassword.getPassword();
         DatabaseManager db = new DatabaseManager("users.db");
         db.execute("CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY,email VARCHAR,password VARBINARY, salt VARBINARY)");
-        byte[] salt = EncryptionMethods.generateSalt(64);
+        byte[] salt = EncryptionMethods.generateBytes(64);
         byte[] hashedPassword = EncryptionMethods.hash(password, salt);
         String sql = "INSERT INTO users(email,password,salt) VALUES(?,?,?)";
         PreparedStatement pstmt = db.createPreparedStatement(sql);
