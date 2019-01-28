@@ -57,19 +57,6 @@ public class DatabaseManager {
             System.out.println(ex.getMessage());
         }
     }   
-    
-}
-=======
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class DatabaseManager {
-
-    private Connection conn;
-
-    public DatabaseManager() {
-        ConnectToDatabase();
-    }
 
     //Connects to the database.
     private void ConnectToDatabase() {
