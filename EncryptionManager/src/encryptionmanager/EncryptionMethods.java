@@ -1,12 +1,11 @@
 package encryptionmanager;
 
-import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.Cipher;
-import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -14,19 +13,21 @@ public class EncryptionMethods {
 
     public static SecureRandom generator = new SecureRandom();
 
-    //Generates a secure random salt (256 bits / 32 bytes in length).
-    public static byte[] generateSalt(int Size) {
-        byte[] salt = new byte[Size];
-        generator.nextBytes(salt);
-        return salt;
+    //Generates a secure random byte array.
+    public static byte[] generateBytes(int Size) {
+        byte[] secureBytes = new byte[Size];
+        generator.nextBytes(secureBytes);
+        return secureBytes;
     }
 
     //Encryptes data using AES with a specific key.
-    public static void AESEncrypt(byte[] key) {
+    public static void AESEncrypt(byte[] key, byte[] IV) {
         try {
+            //We need to create an initizalization vector.
+            IvParameterSpec IVSpec = new IvParameterSpec(IV);
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, IVSpec);
         } catch (Exception e) {
 
         }
