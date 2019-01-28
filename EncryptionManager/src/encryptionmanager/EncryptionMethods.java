@@ -27,6 +27,12 @@ public class EncryptionMethods {
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+            
+            FileOutputStream fout = new FileOutputStream("test.aes");
+            CipherOutputStream cout = new CipherOutputStream(fout, cipher);
+            cout.write("Hello".getBytes());
+            cout.close();
+            fout.close();
         } catch (Exception e) {
 
         }
