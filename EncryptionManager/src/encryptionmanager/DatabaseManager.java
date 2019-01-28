@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 public class DatabaseManager {
 
@@ -38,7 +39,7 @@ public class DatabaseManager {
             if (rs.next()) {
                 byte[] hashedPassword = rs.getBytes("password");
                 byte[] salt = rs.getBytes("salt");
-                if (EncryptionMethods.hash(password, salt) == hashedPassword) {
+                if (Arrays.equals(EncryptionMethods.hash(password, salt), hashedPassword)) {
                     System.out.println("Login Successful.");
                 } else {
                     System.out.println("Incorrect Password.");
