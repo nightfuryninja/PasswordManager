@@ -3,8 +3,10 @@ package encryptionmanager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 public class DatabaseManager {
 
@@ -27,6 +29,28 @@ public class DatabaseManager {
             System.out.println(ex);
         }
     }
+    
+    public void login(String email, char[] password) {
+        String sql = "SELECT password,salt FROM users WHERE email=?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                byte[] hashedPassword = rs.getBytes("password");
+                byte[] salt = rs.getBytes("salt");
+                if (Arrays.equals(EncryptionMethods.hash(password, salt), hashedPassword)) {
+                    System.out.println("Login Successful.");
+                } else {
+                    System.out.println("Incorrect Password.");
+                }
+            } else {
+                System.out.println("Email not found.");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
 
     public PreparedStatement createPreparedStatement(String sql) {
         PreparedStatement pstmt = null;
@@ -37,12 +61,28 @@ public class DatabaseManager {
         }
         return pstmt;
     }
+    
+    public void preparedStatementSetString(PreparedStatement pstmt, int index, String value) {
+        try {
+            pstmt.setString(index, value);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+    
+    public void preparedStatementSetBytes(PreparedStatement pstmt, int index, byte[] value) {
+        try {
+            pstmt.setBytes(index, value);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
 
     public void executePreparedStatement(PreparedStatement pstmt) {
         try {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println(ex);;
+            System.out.println(ex);
         }
     }
 
