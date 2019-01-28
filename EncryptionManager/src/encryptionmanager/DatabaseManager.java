@@ -57,7 +57,7 @@ public class DatabaseManager {
     }
 
     //Inserts a new row of account data into the database.
-    public void InsertRow(String[] args) {
+    public void insertRow(String[] args) {
         String command = String.format("INSERT INTO accounts(website, username, password) "
                 + "VALUES({0}, {1}, {2})", args);
         try {
@@ -70,7 +70,7 @@ public class DatabaseManager {
     }
 
     //Updates an existing row (using ID) in the database.
-    public void UpdateRow(String[] args) {
+    public void updateRow(String[] args) {
         String command = String.format("UPDATE accounts SET {0} = {1} WHERE id  = {3};", args);
         try {
             Statement statement = conn.createStatement();
