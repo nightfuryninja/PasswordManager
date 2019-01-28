@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseManager {
-
+  
     private Connection conn;
 
     public DatabaseManager(String url) {
