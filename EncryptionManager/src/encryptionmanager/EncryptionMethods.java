@@ -4,10 +4,6 @@ import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKeyFactory;
@@ -19,7 +15,7 @@ public class EncryptionMethods {
     public static SecureRandom generator = new SecureRandom();
 
     //Generates a secure random salt (256 bits / 32 bytes in length).
-    public static byte[] GenerateSalt(int Size) {
+    public static byte[] generateSalt(int Size) {
         byte[] salt = new byte[Size];
         generator.nextBytes(salt);
         return salt;
@@ -54,11 +50,10 @@ public class EncryptionMethods {
     }
 
     //Hashes and salts a string. Generates 32 bytes.
-    public static byte[] Hash(String data) {
+    public static byte[] hash(char[] data, byte[] salt) {
         try {
-            byte[] salt = GenerateSalt(64);
             //We cannot do more than 320,000 iterations until it hurts performance.
-            PBEKeySpec keySpec = new PBEKeySpec(data.toCharArray(), salt, 320000, 256);
+            PBEKeySpec keySpec = new PBEKeySpec(data, salt, 320000, 256);
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             return keyFactory.generateSecret(keySpec).getEncoded();
         } catch (NoSuchAlgorithmException ex) {
