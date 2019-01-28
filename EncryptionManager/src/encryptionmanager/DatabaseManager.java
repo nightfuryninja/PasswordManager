@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseManager {
-    
+  
     private Connection conn;
 
     public DatabaseManager(String url) {
         connectToDatabase();
     }
-    
+
     //Connects to the database.
     private void connectToDatabase() {
         try {
@@ -35,7 +35,7 @@ public class DatabaseManager {
             }
         }
     }
-    
+
     public void execute(String sql) {
         try {
             Statement stmt = conn.createStatement();
@@ -44,7 +44,7 @@ public class DatabaseManager {
             System.out.println(ex);
         }
     }
-    
+
     public PreparedStatement createPreparedStatement(String sql) {
         PreparedStatement pstmt = null;
         try {
@@ -54,7 +54,7 @@ public class DatabaseManager {
         }
         return pstmt;
     }
-    
+
     public void executePreparedStatement(PreparedStatement pstmt) {
         try {
             pstmt.executeUpdate();
