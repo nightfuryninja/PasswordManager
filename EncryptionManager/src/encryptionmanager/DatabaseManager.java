@@ -7,8 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseManager {
+<<<<<<< HEAD
 
     private Connection conn = null;
+=======
+  
+    private Connection conn;
+>>>>>>> 637a9c703dc515631cfe275a09d06a33cf809ce7
 
     public DatabaseManager(String url) {
         try {
