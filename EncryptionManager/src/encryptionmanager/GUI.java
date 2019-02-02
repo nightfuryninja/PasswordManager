@@ -2,7 +2,6 @@ package encryptionmanager;
 
 import java.awt.CardLayout;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class GUI extends javax.swing.JFrame {
 
@@ -30,6 +29,7 @@ public class GUI extends javax.swing.JFrame {
         registerPageButton = new javax.swing.JButton();
         loginPageButton = new javax.swing.JButton();
         loginPanel = new javax.swing.JPanel();
+        backButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -37,6 +37,7 @@ public class GUI extends javax.swing.JFrame {
         loginPassword = new javax.swing.JPasswordField();
         loginButton = new javax.swing.JButton();
         registerPanel = new javax.swing.JPanel();
+        backButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -108,6 +109,15 @@ public class GUI extends javax.swing.JFrame {
 
         loginPanel.setLayout(new java.awt.GridBagLayout());
 
+        backButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        backButton1.setText("Back");
+        backButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButton1ActionPerformed(evt);
+            }
+        });
+        loginPanel.add(backButton1, new java.awt.GridBagConstraints());
+
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Password:");
 
@@ -167,6 +177,15 @@ public class GUI extends javax.swing.JFrame {
         rootPanel.add(loginPanel, "login");
 
         registerPanel.setLayout(new java.awt.GridBagLayout());
+
+        backButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+        registerPanel.add(backButton, new java.awt.GridBagConstraints());
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Password:");
@@ -279,7 +298,17 @@ public class GUI extends javax.swing.JFrame {
         cardLayout.show(rootPanel, "register");
     }//GEN-LAST:event_registerPageButtonActionPerformed
 
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        cardLayout.show(rootPanel, "main");
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void backButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButton1ActionPerformed
+        cardLayout.show(rootPanel, "main");
+    }//GEN-LAST:event_backButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
+    private javax.swing.JButton backButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
