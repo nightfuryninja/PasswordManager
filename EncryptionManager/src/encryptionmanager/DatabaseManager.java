@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 
+
 public class DatabaseManager {
 
     private Connection conn = null;
