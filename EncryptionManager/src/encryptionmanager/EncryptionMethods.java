@@ -1,9 +1,12 @@
 package encryptionmanager;
 
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
@@ -26,8 +29,15 @@ public class EncryptionMethods {
             //We need to create an initizalization vector.
             IvParameterSpec IVSpec = new IvParameterSpec(IV);
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            //Use CBC so each block is different.
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");            
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, IVSpec);
+            
+            //***WRITING TO FILE***
+                //First 64 bytes will be the salt (this does not need to be kept private).
+            //FileOutputStream
+            
+            
         } catch (Exception e) {
 
         }
@@ -39,8 +49,20 @@ public class EncryptionMethods {
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, keySpec);
-        } catch (Exception e) {
-
+            
+            //cipher.dofinal
+            
+            
+            
+            
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println("Sorry, that encryption algorithm does not exist.");
+        } catch (NoSuchPaddingException ex) {
+            System.out.println("Sorry, padding algorithm does not exist.");
+        } catch (InvalidKeyException ex) {
+            System.out.println("Sorry, that is an invalid key.");
+        } catch (Exception ex){
+            System.out.println("An exception occured.");
         }
     }
 
@@ -59,5 +81,11 @@ public class EncryptionMethods {
             return null;
         }
     }
-    
+
+    //Generates a password of a certain length.
+    public static void generatePassword(int length) {
+        byte[] passwordBytes = generateBytes(length);
+        System.out.println(Arrays.toString(passwordBytes));
+    }
+
 }
