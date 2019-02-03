@@ -315,7 +315,10 @@ public class GUI extends javax.swing.JFrame {
         String email = loginEmail.getText();
         char[] password = loginPassword.getPassword();
         DatabaseManager db = new DatabaseManager("users.db");
-        db.login(email, password);
+        boolean success = db.login(email, password);
+        if (!success) {
+            loginErrorLabel.setText("Incorrect email/password. Please try again.");
+        }
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void loginPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageButtonActionPerformed
@@ -349,7 +352,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginEmail;
-    public static javax.swing.JLabel loginErrorLabel;
+    private javax.swing.JLabel loginErrorLabel;
     private javax.swing.JButton loginPageButton;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JPasswordField loginPassword;

@@ -30,7 +30,8 @@ public class DatabaseManager {
         }
     }
     
-    public void login(String email, char[] password) {
+    public boolean login(String email, char[] password) {
+        boolean success = false;
         String sql = "SELECT password,salt FROM users WHERE email=?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -41,15 +42,13 @@ public class DatabaseManager {
                 byte[] salt = rs.getBytes("salt");
                 if (Arrays.equals(EncryptionMethods.hash(password, salt), hashedPassword)) {
                     System.out.println("Login Successful.");
-                } else {
-                    GUI.loginErrorLabel.setText("Incorrect Password.");
+                    success = true;
                 }
-            } else {
-                GUI.loginErrorLabel.setText("Email not found.");
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
+        return success;
     }
 
     public PreparedStatement createPreparedStatement(String sql) {
