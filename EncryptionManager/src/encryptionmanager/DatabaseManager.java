@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 
+
 public class DatabaseManager {
 
     private Connection conn = null;
@@ -42,10 +43,10 @@ public class DatabaseManager {
                 if (Arrays.equals(EncryptionMethods.hash(password, salt), hashedPassword)) {
                     System.out.println("Login Successful.");
                 } else {
-                    System.out.println("Incorrect Password.");
+                    GUI.loginErrorLabel.setText("Incorrect Password.");
                 }
             } else {
-                System.out.println("Email not found.");
+                GUI.loginErrorLabel.setText("Email not found.");
             }
         } catch (SQLException ex) {
             System.out.println(ex);
