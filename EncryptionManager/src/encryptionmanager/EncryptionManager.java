@@ -11,16 +11,13 @@ public class EncryptionManager {
     public static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        //Keep the GUI in another thread to stop blocking.
-        Thread GUIThread = new Thread(){
-            @Override
-            public void run(){
-                GUI gui = new GUI();
-                gui.setVisible(true);
-            }
-        };
-        GUIThread.run();
-        
+        try{
+            throw new ArrayIndexOutOfBoundsException();
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            e.printStackTrace();
+        }
     }
     
 }
