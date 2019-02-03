@@ -36,6 +36,7 @@ public class GUI extends javax.swing.JFrame {
         loginEmail = new javax.swing.JTextField();
         loginPassword = new javax.swing.JPasswordField();
         loginButton = new javax.swing.JButton();
+        loginErrorLabel = new javax.swing.JLabel();
         registerPanel = new javax.swing.JPanel();
         backButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -44,6 +45,8 @@ public class GUI extends javax.swing.JFrame {
         registerEmail = new javax.swing.JTextField();
         registerPassword = new javax.swing.JPasswordField();
         registerButton = new javax.swing.JButton();
+        homePanel = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,7 +83,7 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(loginPageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                         .addComponent(registerPageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -116,7 +119,13 @@ public class GUI extends javax.swing.JFrame {
                 backButton1ActionPerformed(evt);
             }
         });
-        loginPanel.add(backButton1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(47, 366, 0, 0);
+        loginPanel.add(backButton1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Password:");
@@ -173,6 +182,11 @@ public class GUI extends javax.swing.JFrame {
         );
 
         loginPanel.add(jPanel1, new java.awt.GridBagConstraints());
+
+        loginErrorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        loginErrorLabel.setForeground(java.awt.Color.red);
+        loginErrorLabel.setText("Error");
+        loginPanel.add(loginErrorLabel, new java.awt.GridBagConstraints());
 
         rootPanel.add(loginPanel, "login");
 
@@ -245,15 +259,37 @@ public class GUI extends javax.swing.JFrame {
 
         rootPanel.add(registerPanel, "register");
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel6.setText("Hello [Name]! Welcome to this Password Manager");
+
+        javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
+        homePanel.setLayout(homePanelLayout);
+        homePanelLayout.setHorizontalGroup(
+            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(homePanelLayout.createSequentialGroup()
+                .addGap(308, 308, 308)
+                .addComponent(jLabel6)
+                .addContainerGap(736, Short.MAX_VALUE))
+        );
+        homePanelLayout.setVerticalGroup(
+            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(homePanelLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel6)
+                .addContainerGap(627, Short.MAX_VALUE))
+        );
+
+        rootPanel.add(homePanel, "card5");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(rootPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1032, Short.MAX_VALUE)
+            .addComponent(rootPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(rootPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+            .addComponent(rootPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -309,16 +345,19 @@ public class GUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;
     private javax.swing.JButton backButton1;
+    private javax.swing.JPanel homePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginEmail;
+    public static javax.swing.JLabel loginErrorLabel;
     private javax.swing.JButton loginPageButton;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JPasswordField loginPassword;
