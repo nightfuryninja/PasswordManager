@@ -311,14 +311,6 @@ public class GUI extends javax.swing.JFrame {
         db.close();    
     }//GEN-LAST:event_registerButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        cardLayout.show(rootPanel, "main");
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        cardLayout.show(rootPanel, "main");
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String email = loginEmail.getText();
         char[] password = loginPassword.getPassword();
