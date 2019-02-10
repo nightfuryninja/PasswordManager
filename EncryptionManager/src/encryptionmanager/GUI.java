@@ -11,6 +11,7 @@ public class GUI extends javax.swing.JFrame {
         initComponents();
         cardLayout = (CardLayout) rootPanel.getLayout(); // Get card layout
         loginErrorLabel.setVisible(false); // Hide error label on login page
+        registerErrorLabel.setVisible(false); // Hide error label on register page
     }
 
     /**
@@ -48,6 +49,7 @@ public class GUI extends javax.swing.JFrame {
         registerEmail = new javax.swing.JTextField();
         registerPassword = new javax.swing.JPasswordField();
         registerButton = new javax.swing.JButton();
+        registerErrorLabel = new javax.swing.JLabel();
         homePanel = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
 
@@ -201,7 +203,6 @@ public class GUI extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(22, 0, 0, 0);
         loginPanel.add(jPanel4, gridBagConstraints);
 
         rootPanel.add(loginPanel, "login");
@@ -283,6 +284,16 @@ public class GUI extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel5.add(jPanel3, gridBagConstraints);
+
+        registerErrorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        registerErrorLabel.setForeground(java.awt.Color.red);
+        registerErrorLabel.setText("Error");
+        registerErrorLabel.setPreferredSize(new java.awt.Dimension(424, 22));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel5.add(registerErrorLabel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -395,6 +406,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton registerButton;
     private javax.swing.JTextField registerEmail;
+    private javax.swing.JLabel registerErrorLabel;
     private javax.swing.JButton registerPageButton;
     private javax.swing.JPanel registerPanel;
     private javax.swing.JPasswordField registerPassword;
