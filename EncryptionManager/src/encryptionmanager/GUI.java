@@ -347,15 +347,18 @@ public class GUI extends javax.swing.JFrame {
             System.out.println("Email valid");
             if (ValidationMethods.isPasswordValid(password)) {
                 System.out.println("Password valid");
+                
+                DatabaseManager db = new DatabaseManager("users.db");
+                db.register(email, password);
             } else {
-                System.out.println("Password invalid");
+                registerErrorLabel.setText("Invalid password. Please try again.");
+                registerErrorLabel.setVisible(true);
             }
         } else {
-            System.out.println("Email invalid");
+            registerErrorLabel.setText("Invalid email address. Please try again.");
+            registerErrorLabel.setVisible(true);
         }
         
-        //DatabaseManager db = new DatabaseManager("users.db");
-        //db.register(email, password);
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
