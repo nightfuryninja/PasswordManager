@@ -345,6 +345,11 @@ public class GUI extends javax.swing.JFrame {
         
         if (ValidationMethods.isEmailValid(email)) {
             System.out.println("Email valid");
+            if (ValidationMethods.isPasswordValid(password)) {
+                System.out.println("Password valid");
+            } else {
+                System.out.println("Password invalid");
+            }
         } else {
             System.out.println("Email invalid");
         }

@@ -14,4 +14,13 @@ public class ValidationMethods {
         return isValid;
     }
     
+    public static boolean isPasswordValid(char[] password) {
+        String regex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!\"£$€%^&*()@#/?]).{8,})"; // Password must contain at least one digit, at least one lower case letter, at least one upper case letter, at least one special character and must be at least 8 characters long.
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(new String(password));
+        boolean isValid = matcher.matches();
+        
+        return isValid;
+    }
+    
 }
