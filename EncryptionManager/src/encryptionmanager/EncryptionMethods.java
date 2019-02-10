@@ -1,16 +1,16 @@
 package encryptionmanager;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.NoSuchPaddingException;
 
 public class EncryptionMethods {
 
@@ -31,13 +31,7 @@ public class EncryptionMethods {
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
             //Use CBC so each block is different.
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");            
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec, IVSpec);
-            
-            //***WRITING TO FILE***
-                //First 64 bytes will be the salt (this does not need to be kept private).
-            //FileOutputStream
-            
-            
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, IVSpec);            
         } catch (Exception e) {
 
         }
@@ -49,12 +43,6 @@ public class EncryptionMethods {
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, keySpec);
-            
-            //cipher.dofinal
-            
-            
-            
-            
         } catch (NoSuchAlgorithmException ex) {
             System.out.println("Sorry, that encryption algorithm does not exist.");
         } catch (NoSuchPaddingException ex) {

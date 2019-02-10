@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package encryptionmanager;
 
 import java.io.FileInputStream;
@@ -59,5 +54,16 @@ public class FileHandler {
                 System.out.println("There was an IO exception when trying to close the stream.");
             }
         }
+    }
+    
+    
+    public static OutputStream writeBinaryFile(String path){
+        try{
+            FileOutputStream outputStream = new FileOutputStream(path);
+            return outputStream;
+        } catch(FileNotFoundException ex){
+            System.out.println("Sorry, we could not find that file.");
+            return null;
+        }        
     }
 }
