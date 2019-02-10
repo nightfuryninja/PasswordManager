@@ -9,7 +9,8 @@ public class GUI extends javax.swing.JFrame {
     
     public GUI() {
         initComponents();
-        cardLayout = (CardLayout) rootPanel.getLayout();
+        cardLayout = (CardLayout) rootPanel.getLayout(); // Get card layout
+        loginErrorLabel.setVisible(false); // Hide error label on login page
     }
 
     /**
@@ -29,6 +30,7 @@ public class GUI extends javax.swing.JFrame {
         registerPageButton = new javax.swing.JButton();
         loginPageButton = new javax.swing.JButton();
         loginPanel = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         backButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -110,7 +112,7 @@ public class GUI extends javax.swing.JFrame {
 
         rootPanel.add(mainPanel, "main");
 
-        loginPanel.setLayout(new java.awt.GridBagLayout());
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
         backButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         backButton1.setText("Back");
@@ -119,13 +121,7 @@ public class GUI extends javax.swing.JFrame {
                 backButton1ActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(47, 366, 0, 0);
-        loginPanel.add(backButton1, gridBagConstraints);
+        jPanel4.add(backButton1, new java.awt.GridBagConstraints());
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Password:");
@@ -181,12 +177,39 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(loginButton))
         );
 
-        loginPanel.add(jPanel1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel4.add(jPanel1, gridBagConstraints);
 
         loginErrorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         loginErrorLabel.setForeground(java.awt.Color.red);
         loginErrorLabel.setText("Error");
-        loginPanel.add(loginErrorLabel, new java.awt.GridBagConstraints());
+        loginErrorLabel.setPreferredSize(new java.awt.Dimension(424, 22));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel4.add(loginErrorLabel, gridBagConstraints);
+
+        javax.swing.GroupLayout loginPanelLayout = new javax.swing.GroupLayout(loginPanel);
+        loginPanel.setLayout(loginPanelLayout);
+        loginPanelLayout.setHorizontalGroup(
+            loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(loginPanelLayout.createSequentialGroup()
+                .addGap(649, 649, 649)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(422, Short.MAX_VALUE))
+        );
+        loginPanelLayout.setVerticalGroup(
+            loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(loginPanelLayout.createSequentialGroup()
+                .addGap(280, 280, 280)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(271, Short.MAX_VALUE))
+        );
 
         rootPanel.add(loginPanel, "login");
 
@@ -269,7 +292,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(homePanelLayout.createSequentialGroup()
                 .addGap(308, 308, 308)
                 .addComponent(jLabel6)
-                .addContainerGap(736, Short.MAX_VALUE))
+                .addContainerGap(858, Short.MAX_VALUE))
         );
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,6 +341,7 @@ public class GUI extends javax.swing.JFrame {
         boolean success = db.login(email, password);
         if (!success) {
             loginErrorLabel.setText("Incorrect email/password. Please try again.");
+            loginErrorLabel.setVisible(true);
         }
     }//GEN-LAST:event_loginButtonActionPerformed
 
@@ -350,6 +374,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginEmail;
     private javax.swing.JLabel loginErrorLabel;
