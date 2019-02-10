@@ -30,6 +30,26 @@ public class DatabaseManager {
         }
     }
     
+    public void register(String email, char[] password) {
+        String sql = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY,email VARCHAR,password VARBINARY, salt VARBINARY)";
+        String sql2 = "INSERT INTO users(email,password,salt) VALUES(?,?,?)";
+
+        byte[] salt = EncryptionMethods.generateBytes(64);
+        byte[] hashedPassword = EncryptionMethods.hash(password, salt);
+        
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);
+            PreparedStatement pstmt = conn.prepareStatement(sql2);
+            pstmt.setString(1, email);
+            pstmt.setBytes(2, hashedPassword);
+            pstmt.setBytes(3, salt);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+    
     public boolean login(String email, char[] password) {
         boolean success = false;
         String sql = "SELECT password,salt FROM users WHERE email=?";

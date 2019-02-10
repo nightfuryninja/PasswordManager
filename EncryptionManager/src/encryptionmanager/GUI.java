@@ -342,17 +342,15 @@ public class GUI extends javax.swing.JFrame {
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         String email = registerEmail.getText();
         char[] password = registerPassword.getPassword();
-        DatabaseManager db = new DatabaseManager("users.db");
-        db.execute("CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY,email VARCHAR,password VARBINARY, salt VARBINARY)");
-        byte[] salt = EncryptionMethods.generateBytes(64);
-        byte[] hashedPassword = EncryptionMethods.hash(password, salt);
-        String sql = "INSERT INTO users(email,password,salt) VALUES(?,?,?)";
-        PreparedStatement pstmt = db.createPreparedStatement(sql);
-        db.preparedStatementSetString(pstmt, 1, email);
-        db.preparedStatementSetBytes(pstmt, 2, hashedPassword);
-        db.preparedStatementSetBytes(pstmt, 3, salt);
-        db.executePreparedStatement(pstmt);
-        db.close();    
+        
+        if (ValidationMethods.isEmailValid(email)) {
+            System.out.println("Email valid");
+        } else {
+            System.out.println("Email invalid");
+        }
+        
+        //DatabaseManager db = new DatabaseManager("users.db");
+        //db.register(email, password);
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
