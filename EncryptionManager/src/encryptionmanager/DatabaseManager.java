@@ -61,7 +61,6 @@ public class DatabaseManager {
                 byte[] hashedPassword = rs.getBytes("password");
                 byte[] salt = rs.getBytes("salt");
                 if (Arrays.equals(EncryptionMethods.hash(password, salt), hashedPassword)) {
-                    System.out.println("Login Successful.");
                     success = true;
                 }
             }

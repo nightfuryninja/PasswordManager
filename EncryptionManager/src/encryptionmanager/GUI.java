@@ -1,7 +1,6 @@
 package encryptionmanager;
 
 import java.awt.CardLayout;
-import java.sql.PreparedStatement;
 
 public class GUI extends javax.swing.JFrame {
 
@@ -51,7 +50,8 @@ public class GUI extends javax.swing.JFrame {
         registerButton = new javax.swing.JButton();
         registerErrorLabel = new javax.swing.JLabel();
         homePanel = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        welcomeLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -303,27 +303,44 @@ public class GUI extends javax.swing.JFrame {
 
         rootPanel.add(registerPanel, "register");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel6.setText("Hello [Name]! Welcome to this Password Manager");
+        welcomeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        welcomeLabel.setText("Websites");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(welcomeLabel)
+                .addContainerGap(781, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(welcomeLabel)
+                .addContainerGap(486, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
         homePanelLayout.setHorizontalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homePanelLayout.createSequentialGroup()
-                .addGap(308, 308, 308)
-                .addComponent(jLabel6)
-                .addContainerGap(858, Short.MAX_VALUE))
+                .addGap(188, 188, 188)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(505, Short.MAX_VALUE))
         );
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homePanelLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel6)
-                .addContainerGap(627, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(151, Short.MAX_VALUE))
         );
 
-        rootPanel.add(homePanel, "card5");
+        rootPanel.add(homePanel, "home");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -366,7 +383,9 @@ public class GUI extends javax.swing.JFrame {
         char[] password = loginPassword.getPassword();
         DatabaseManager db = new DatabaseManager("users.db");
         boolean success = db.login(email, password);
-        if (!success) {
+        if (success) {
+            cardLayout.show(rootPanel, "home");
+        } else {
             loginErrorLabel.setText("Incorrect email/password. Please try again.");
             loginErrorLabel.setVisible(true);
         }
@@ -397,12 +416,12 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginEmail;
     private javax.swing.JLabel loginErrorLabel;
@@ -417,5 +436,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel registerPanel;
     private javax.swing.JPasswordField registerPassword;
     private javax.swing.JPanel rootPanel;
+    private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }
