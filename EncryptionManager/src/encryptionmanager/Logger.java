@@ -7,7 +7,7 @@ public class Logger {
         
     }
     
-    public void error(String Data, Exception e){
+    public void error(String errorData, Exception e){
         System.out.println(errorData);
     }
     
