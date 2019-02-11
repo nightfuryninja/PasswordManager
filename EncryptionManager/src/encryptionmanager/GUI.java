@@ -1,11 +1,12 @@
 package encryptionmanager;
 
 import java.awt.CardLayout;
+import java.io.File;
 
 public class GUI extends javax.swing.JFrame {
 
     public CardLayout cardLayout;
-    
+
     public GUI() {
         initComponents();
         cardLayout = (CardLayout) rootPanel.getLayout(); // Get card layout
@@ -374,12 +375,17 @@ public class GUI extends javax.swing.JFrame {
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         String email = registerEmail.getText();
         char[] password = registerPassword.getPassword();
-        
+
         if (ValidationMethods.isEmailValid(email)) {
             System.out.println("Email valid");
             if (ValidationMethods.isPasswordValid(password)) {
                 System.out.println("Password valid");
-                
+
+//                String URL = System.getenv("APPDATA") + "\\PasswordManager";
+//                File file = new File(URL);
+//                file.mkdirs();
+//                URL = URL + "\\user.db";
+
                 DatabaseManager db = new DatabaseManager("users.db");
                 db.register(email, password);
             } else {
@@ -390,7 +396,7 @@ public class GUI extends javax.swing.JFrame {
             registerErrorLabel.setText("Invalid email address. Please try again.");
             registerErrorLabel.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
