@@ -55,15 +55,14 @@ public class FileHandler {
             }
         }
     }
-    
-    
-    public static OutputStream writeBinaryFile(String path){
-        try{
+
+    public static OutputStream writeBinaryFile(String path) {
+        try {
             FileOutputStream outputStream = new FileOutputStream(path);
             return outputStream;
-        } catch(FileNotFoundException ex){
+        } catch (FileNotFoundException ex) {
             System.out.println("Sorry, we could not find that file.");
             return null;
-        }        
+        }
     }
 }

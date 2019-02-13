@@ -11,7 +11,12 @@ import java.util.Arrays;
 public class DatabaseManager {
 
     private Connection conn = null;
-
+    
+    /**
+     * The database should be stored in memory (temporarily) then encrypted.
+     * 
+     */
+    
     public DatabaseManager(String url) {
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:" + url);

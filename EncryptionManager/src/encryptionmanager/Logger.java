@@ -18,7 +18,7 @@ public class Logger {
         System.out.println(errorData);
         writeToLog(errorData);
     }
-
+    
     //Writes data to a log file.
     private static void writeToLog(String data) {
         try {
