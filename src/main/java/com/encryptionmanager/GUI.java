@@ -1,4 +1,6 @@
-package encryptionmanager;
+package com.encryptionmanager;
+
+
 
 import java.awt.CardLayout;
 import java.io.File;

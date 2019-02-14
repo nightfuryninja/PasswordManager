@@ -1,4 +1,6 @@
-package encryptionmanager;
+package com.encryptionmanager;
+
+
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.SecureRandom;

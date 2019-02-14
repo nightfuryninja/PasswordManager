@@ -1,4 +1,4 @@
-package encryptionmanager;
+package com.encryptionmanager;
 
 public class EncryptionManager {
 
@@ -29,7 +29,8 @@ public class EncryptionManager {
             java.util.logging.Logger.getLogger(EncryptionManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        //</editor-fold>
+        
         //Keep the GUI in another thread to stop blocking.
         Thread GUIThread = new Thread(){
             @Override
@@ -38,7 +39,7 @@ public class EncryptionManager {
                 gui.setVisible(true);
             }
         };
-        GUIThread.run();
+        GUIThread.start();
         
     }
 
