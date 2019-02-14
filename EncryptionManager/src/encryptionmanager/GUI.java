@@ -386,7 +386,7 @@ public class GUI extends javax.swing.JFrame {
 //                file.mkdirs();
 //                URL = URL + "\\user.db";
 
-                DatabaseManager db = new DatabaseManager("users.db");
+                DatabaseManager db = new DatabaseManager();
                 db.register(email, password);
             } else {
                 registerErrorLabel.setText("Invalid password. Please try again.");
@@ -402,7 +402,7 @@ public class GUI extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String email = loginEmail.getText();
         char[] password = loginPassword.getPassword();
-        DatabaseManager db = new DatabaseManager("users.db");
+        DatabaseManager db = new DatabaseManager();
         boolean success = db.login(email, password);
         if (success) {
             cardLayout.show(rootPanel, "home");

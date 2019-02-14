@@ -11,15 +11,11 @@ import java.util.Arrays;
 public class DatabaseManager {
 
     private Connection conn = null;
-    
-    /**
-     * The database should be stored in memory (temporarily) then encrypted.
-     * 
-     */
-    
-    public DatabaseManager(String url) {
+
+    public DatabaseManager() {
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite:" + url);
+            //Plain text database is stored in memory as it is volatile.
+            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
             System.out.println("Connection Sucessful.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -34,14 +30,23 @@ public class DatabaseManager {
             System.out.println(ex);
         }
     }
-    
+
+    public void backupDatabase() {
+        try {
+            Statement statement = conn.createStatement();
+            statement.execute("backup to backup.db");
+        } catch (SQLException ex) {
+            System.out.println("There is an SQL exception when backing up database.");
+        }
+    }
+
     public void register(String email, char[] password) {
         String sql = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY,email VARCHAR,password VARBINARY, salt VARBINARY)";
         String sql2 = "INSERT INTO users(email,password,salt) VALUES(?,?,?)";
 
         byte[] salt = EncryptionMethods.generateBytes(64);
         byte[] hashedPassword = EncryptionMethods.hash(password, salt);
-        
+
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
@@ -54,7 +59,7 @@ public class DatabaseManager {
             System.out.println(ex);
         }
     }
-    
+
     public boolean login(String email, char[] password) {
         boolean success = false;
         String sql = "SELECT password,salt FROM users WHERE email=?";
@@ -84,7 +89,7 @@ public class DatabaseManager {
         }
         return pstmt;
     }
-    
+
     public void preparedStatementSetString(PreparedStatement pstmt, int index, String value) {
         try {
             pstmt.setString(index, value);
@@ -92,7 +97,7 @@ public class DatabaseManager {
             System.out.println(ex);
         }
     }
-    
+
     public void preparedStatementSetBytes(PreparedStatement pstmt, int index, byte[] value) {
         try {
             pstmt.setBytes(index, value);

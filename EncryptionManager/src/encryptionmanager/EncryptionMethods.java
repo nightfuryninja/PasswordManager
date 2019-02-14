@@ -1,7 +1,5 @@
 package encryptionmanager;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -31,22 +29,17 @@ public class EncryptionMethods {
     }
 
     //Encryptes data using AES with a specific key.
-    public static void AESEncrypt(byte[] key, byte[] data) {
+    public static byte[] AESEncrypt(byte[] key, byte[] data) {
         try {
-            //ADD FILE PATH
-            OutputStream out =FileHandler.writeBinaryFile("");
             //We need to create an initizalization vector.
             IvParameterSpec IVSpec = new IvParameterSpec(generateBytes(16));
             //First 16 bytes of file will be IV.
-            out.write(IVSpec.getIV());
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
             //Use CBC so each block is different.
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");            
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, IVSpec);
             //First 16 bytes must be IV
-            byte[] ciphertext = cipher.doFinal(data);
-            out.write(ciphertext);
-            out.close();
+            return cipher.doFinal(data);
         } catch(NoSuchAlgorithmException ex){
             System.out.println("That algorithm doesn't exist.");
         } catch(NoSuchPaddingException ex){
@@ -59,23 +52,21 @@ public class EncryptionMethods {
             System.out.println("That is an illegal block size.");
         } catch (BadPaddingException ex){
             System.out.println("Bad padding. Please try again.");
-        } catch(IOException ex){
-            System.out.println("An IO exception occured.");
         }
+        return null;
     }
 
     //Decrypts data using AES with a speciic key.
-    public static void AESDecrypt(byte[] key) {
+    public static byte[] AESDecrypt(byte[] key, byte[] IV,  byte[] data) {
         //We should only ever decrypt to memory (seeing as it is volatile).
         SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-        byte[] data = FileHandler.readBinaryFile("");
         //The IV parameter is first 16 bytes in the file.
-        IvParameterSpec IVSpect = new IvParameterSpec(Arrays.copyOf(data, 15));
+        IvParameterSpec IVSpect = new IvParameterSpec(IV);
         try{
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, keySpec, IVSpect);
         //Everything after position 15 in data.
-        cipher.doFinal();
+        return cipher.doFinal(data);
         } catch (NoSuchAlgorithmException ex){
             System.out.println("That encryption algorithm does not exist.");
         } catch (NoSuchPaddingException ex){
@@ -89,6 +80,7 @@ public class EncryptionMethods {
         } catch (BadPaddingException ex){
             System.out.println("Bad padding exception.");
         }
+        return null;
     }
 
     //Hashes and salts a string. Generates 32 bytes.
