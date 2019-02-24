@@ -1,6 +1,5 @@
 package com.encryptionmanager;
 
-import java.security.InvalidAlgorithmParameterException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import javax.crypto.Cipher;
@@ -9,11 +8,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.spec.InvalidKeySpecException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class EncryptionMethods {
 
@@ -26,67 +21,33 @@ public class EncryptionMethods {
         return secureBytes;
     }
 
-    //Encryptes data using AES with a specific key.
-    public static byte[] AESEncrypt(byte[] key, byte[] data, byte[] IV ) {
+        public static byte[] AESEncrypt(byte[] key, byte[] initVector, byte[] data) {
         try {
-            if(IV == null){
-               IV = generateBytes(16);
-            }
-             
-            //We need to create an initizalization vector.
-            IvParameterSpec IVSpec = new IvParameterSpec(IV);
-            //First 16 bytes of file will be IV.
-            SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-            //Use CBC so each block is different.
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec, IVSpec);
-
-            byte[] datas = new byte[32];
-            System.arraycopy(IVSpec.getIV(), 0, datas, 0, 16);
-            System.arraycopy(cipher.doFinal(), 0, datas, 16, cipher.doFinal().length);
-            return cipher.doFinal();
-            //First 16 bytes must be IV
-        } catch (NoSuchAlgorithmException ex) {
-            System.out.println("That algorithm doesn't exist.");
-        } catch (NoSuchPaddingException ex) {
-            System.out.println("That padding doesn't exist.");
-        } catch (InvalidKeyException ex) {
-            System.out.println("Invalid key.");
-        } catch (InvalidAlgorithmParameterException ex) {
-            System.out.println("Invalid algorithm parameter.");
-        } catch (IllegalBlockSizeException ex) {
-            System.out.println("That is an illegal block size.");
-        } catch (BadPaddingException ex) {
-            System.out.println("Bad padding. Please try again.");
+            IvParameterSpec iv = new IvParameterSpec(initVector);
+            SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+            byte[] encrypted = cipher.doFinal(data);
+            return encrypted;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return null;
     }
 
-    //Decrypts data using AES with a speciic key.
-    public static byte[] AESDecrypt(byte[] key, byte[] IV, byte[] data) {
-        //We should only ever decrypt to memory (seeing as it is volatile).
-        SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-        //The IV parameter is first 16 bytes in the file.
-        IvParameterSpec IVSpect = new IvParameterSpec(IV);
+    public static byte[] AESDecrypt(byte[] key, byte[] initVector, byte[] encrypted) {
         try {
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, keySpec, IVSpect);
-        //Everything after position 16 is data.
-        byte[] encryptedData = cipher.doFinal();
-        byte[] returnData = new byte[16 + encryptedData.length];        
-        return cipher.doFinal(data);
-        } catch (NoSuchAlgorithmException ex) {
-            System.out.println("That encryption algorithm does not exist.");
-        } catch (NoSuchPaddingException ex) {
-            System.out.println("That padding does not exist.");
-        } catch (InvalidKeyException ex) {
-            System.out.println("That is an invalid key.");
-        } catch (InvalidAlgorithmParameterException ex) {
-            System.out.println("Invalid algorith parameter." + ex.getMessage());
-        } catch (IllegalBlockSizeException ex) {
-            System.out.println("Block size invalid. Something went wrong.");
-        } catch (BadPaddingException ex) {
-            System.out.println("Bad padding exception.");
+            IvParameterSpec iv = new IvParameterSpec(initVector);
+            SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+
+            byte[] original = cipher.doFinal(encrypted);
+
+            return original;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return null;
     }

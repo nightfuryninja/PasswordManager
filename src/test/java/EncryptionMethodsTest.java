@@ -12,8 +12,9 @@ public class EncryptionMethodsTest {
     @Test
     public void encryptData() {
         byte[] key = "ThisKeyIsThirtyTwoBytesLong(32).".getBytes();
+        byte[] IV = EncryptionMethods.generateBytes(16);
         byte[] data = "This Data Must Be Encrypted".getBytes();
-        byte[] encryptedData = EncryptionMethods.AESEncrypt(key, data, null);
+        byte[] encryptedData = EncryptionMethods.AESEncrypt(key, IV, data);
         if (new String(data).equalsIgnoreCase(new String(encryptedData))) {
             fail("AESEncrypt failed to encrypt the data.");
         }
@@ -22,13 +23,12 @@ public class EncryptionMethodsTest {
     @Test
     public void decryptData() {
         byte[] key = "ThisKeyIsThirtyTwoBytesLong(32).".getBytes();
+        byte[] IV = EncryptionMethods.generateBytes(16);
         byte[] data = "This Data Must Be Encrypted".getBytes();
-        byte[] encryptedData = EncryptionMethods.AESEncrypt(key, data, null);
-        System.out.println(encryptedData.length);
-        byte[] IV = Arrays.copyOf(encryptedData, 16);
-        byte[] dataToDecrypt = Arrays.copyOfRange(encryptedData, 16, encryptedData.length);
-        byte[] decryptedData = EncryptionMethods.AESDecrypt(key, IV, dataToDecrypt);
-        //Broken
+        
+        byte[] encrypted = EncryptionMethods.AESEncrypt(key, IV, data);
+        byte[] decrytped = EncryptionMethods.AESDecrypt(key, IV, encrypted);
+        assertArrayEquals(data, decrytped);
     }
 
     @Test
