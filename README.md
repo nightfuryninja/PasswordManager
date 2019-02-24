@@ -1,4 +1,6 @@
 # Password Manager
+[![Build Status](https://travis-ci.com/nightfuryninja/PasswordManager.svg?branch=master)](https://travis-ci.com/nightfuryninja/PasswordManager)
+
 ### Brief Understanding of What a Password is
 A password acts as a digital key that grants you access to important personal accounts. 
 
