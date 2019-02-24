@@ -2,6 +2,7 @@ package com.encryptionmanager;
 
 
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,14 +15,25 @@ public class DatabaseManager {
 
     private Connection conn = null;
 
-    public DatabaseManager() {
+    public DatabaseManager(String email) {
         try {
             //Plain text database is stored in memory as it is volatile.
-            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+            String url = getDatabaseURL(email);
+            conn = DriverManager.getConnection("jdbc:sqlite:" + url);
             System.out.println("Connection Sucessful.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+    public final String getDatabaseURL(String email) {
+        String URL = System.getenv("APPDATA") + "\\PasswordManager";
+        File file = new File(URL);
+        file.mkdirs();
+        String dbName = EncryptionMethods.hashEmail(email);
+        URL = URL + "\\" + dbName + ".db";
+        
+        return URL;
     }
 
     public void execute(String sql) {
@@ -43,20 +55,14 @@ public class DatabaseManager {
     }
 
     public void register(String email, char[] password) {
-        String sql = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY,email VARCHAR,password VARBINARY, salt VARBINARY)";
-        String sql2 = "INSERT INTO users(email,password,salt) VALUES(?,?,?)";
+        String sql = "CREATE TABLE IF NOT EXISTS passwords (id integer PRIMARY KEY,name VARCHAR,username VARCHAR,password VARCHAR)";
 
-        byte[] salt = EncryptionMethods.generateBytes(64);
+        byte[] salt = email.getBytes();
         byte[] hashedPassword = EncryptionMethods.hash(password, salt);
-
+        
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
-            PreparedStatement pstmt = conn.prepareStatement(sql2);
-            pstmt.setString(1, email);
-            pstmt.setBytes(2, hashedPassword);
-            pstmt.setBytes(3, salt);
-            pstmt.executeUpdate();
         } catch (SQLException ex) {
             System.out.println(ex);
         }

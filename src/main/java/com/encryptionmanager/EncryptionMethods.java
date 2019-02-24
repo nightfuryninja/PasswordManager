@@ -99,7 +99,7 @@ public class EncryptionMethods {
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             return keyFactory.generateSecret(keySpec).getEncoded();
         } catch (NoSuchAlgorithmException ex) {
-            System.out.println("Sorry, that encryption algorith doesn't exist.");
+            System.out.println("Sorry, that encryption algorithm doesn't exist.");
             return null;
         } catch (InvalidKeySpecException ex) {
             System.out.println("Sorry, that is an invalid key specification.");
@@ -111,6 +111,25 @@ public class EncryptionMethods {
     public static void generatePassword(int length) {
         byte[] passwordBytes = generateBytes(length);
         System.out.println(Arrays.toString(passwordBytes));
+    }
+    
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for(byte b: bytes) {
+            builder.append(String.format("%02x", b));
+        }
+        String hexString = builder.toString();
+        return hexString;
+    }
+    
+    public static String hashEmail(String email) {
+        String[] emailArray = email.split("@");
+        char[] username = emailArray[0].toCharArray();
+        byte[] domain = emailArray[1].getBytes();
+        byte[] hashedEmailBytes = hash(username, domain);
+        String hashedEmailHex = bytesToHex(hashedEmailBytes);
+        
+        return hashedEmailHex;
     }
 
 }

@@ -411,12 +411,7 @@ public class GUI extends javax.swing.JFrame {
             if (ValidationMethods.isPasswordValid(password)) {
                 System.out.println("Password valid");
 
-//                String URL = System.getenv("APPDATA") + "\\PasswordManager";
-//                File file = new File(URL);
-//                file.mkdirs();
-//                URL = URL + "\\user.db";
-
-                db = new DatabaseManager();
+                db = new DatabaseManager(email);
                 db.register(email, password);
             } else {
                 registerErrorLabel.setText("Invalid password. Please try again.");
