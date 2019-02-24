@@ -3,11 +3,12 @@ package com.encryptionmanager;
 
 
 import java.awt.CardLayout;
-import java.io.File;
+import javax.swing.table.DefaultTableModel;
 
 public class GUI extends javax.swing.JFrame {
 
     public CardLayout cardLayout;
+    private DatabaseManager db;
 
     public GUI() {
         initComponents();
@@ -56,6 +57,9 @@ public class GUI extends javax.swing.JFrame {
         homePanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         welcomeLabel = new javax.swing.JLabel();
+        databasePanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        userDetails = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -360,6 +364,30 @@ public class GUI extends javax.swing.JFrame {
 
         rootPanel.add(homePanel, "home");
 
+        databasePanel.setLayout(new java.awt.GridBagLayout());
+
+        userDetails.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Website", "Email / Username", "Password"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(userDetails);
+
+        databasePanel.add(jScrollPane1, new java.awt.GridBagConstraints());
+
+        rootPanel.add(databasePanel, "card6");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -388,7 +416,7 @@ public class GUI extends javax.swing.JFrame {
 //                file.mkdirs();
 //                URL = URL + "\\user.db";
 
-                DatabaseManager db = new DatabaseManager();
+                db = new DatabaseManager();
                 db.register(email, password);
             } else {
                 registerErrorLabel.setText("Invalid password. Please try again.");
@@ -414,6 +442,11 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_loginButtonActionPerformed
 
+    private void loadTableFromDatabase(){
+        DefaultTableModel  model = (DefaultTableModel) userDetails.getModel();
+        
+    }
+    
     private void loginPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageButtonActionPerformed
         cardLayout.show(rootPanel, "login");
     }//GEN-LAST:event_loginPageButtonActionPerformed
@@ -433,6 +466,7 @@ public class GUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;
     private javax.swing.JButton backButton1;
+    private javax.swing.JPanel databasePanel;
     private javax.swing.JPanel homePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -446,6 +480,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginEmail;
     private javax.swing.JLabel loginErrorLabel;
@@ -460,6 +495,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel registerPanel;
     private javax.swing.JPasswordField registerPassword;
     private javax.swing.JPanel rootPanel;
+    private javax.swing.JTable userDetails;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

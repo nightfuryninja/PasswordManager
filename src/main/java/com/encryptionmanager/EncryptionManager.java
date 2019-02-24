@@ -30,7 +30,7 @@ public class EncryptionManager {
         }
         //</editor-fold>
         //</editor-fold>
-        
+
         //Keep the GUI in another thread to stop blocking.
         Thread GUIThread = new Thread(){
             @Override
@@ -40,7 +40,6 @@ public class EncryptionManager {
             }
         };
         GUIThread.start();
-        
     }
 
 }
