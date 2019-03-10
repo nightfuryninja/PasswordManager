@@ -3,18 +3,40 @@ package com.encryptionmanager;
 
 
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
 public class GUI extends javax.swing.JFrame {
 
     public CardLayout cardLayout;
     private DatabaseManager db;
+    
+    public void showAddWebsitePopup() {
+        JPanel panel = new AddWebsitePopup();
+        JOptionPane.showMessageDialog(rootPane, panel, "Add Website", JOptionPane.PLAIN_MESSAGE);
+    }
 
     public GUI() {
         initComponents();
         cardLayout = (CardLayout) rootPanel.getLayout(); // Get card layout
         loginErrorLabel.setVisible(false); // Hide error label on login page
         registerErrorLabel.setVisible(false); // Hide error label on register page
+        
+        // Temp
+        cardLayout.show(rootPanel, "home");
+        db = new DatabaseManager();
+        DefaultTableModel model = (DefaultTableModel) passwordTable.getModel();
+        ArrayList<Website> websites = db.getWebsites();
+        for (Website website : websites) {
+            String name = website.getName();
+            String url = website.getUrl();
+            String username = website.getUsername();
+            String password = website.getPassword();
+            
+            model.addRow(new Object[]{name, url, username, password});
+        }
     }
 
     /**
@@ -57,6 +79,9 @@ public class GUI extends javax.swing.JFrame {
         homePanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         welcomeLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        passwordTable = new javax.swing.JTable();
+        addWebsiteButton = new javax.swing.JButton();
         databasePanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         userDetails = new javax.swing.JTable();
@@ -325,24 +350,69 @@ public class GUI extends javax.swing.JFrame {
 
         rootPanel.add(registerPanel, "register");
 
-        welcomeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        welcomeLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         welcomeLabel.setText("Websites");
+
+        passwordTable.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        passwordTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Name", "URL", "Username", "Password"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        passwordTable.setRowHeight(25);
+        passwordTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(passwordTable);
+        if (passwordTable.getColumnModel().getColumnCount() > 0) {
+            passwordTable.getColumnModel().getColumn(0).setResizable(false);
+            passwordTable.getColumnModel().getColumn(1).setResizable(false);
+            passwordTable.getColumnModel().getColumn(2).setResizable(false);
+            passwordTable.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        addWebsiteButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        addWebsiteButton.setText("Add Website");
+        addWebsiteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addWebsiteButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
                 .addComponent(welcomeLabel)
-                .addContainerGap(781, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addWebsiteButton))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(welcomeLabel)
-                .addContainerGap(486, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(welcomeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addWebsiteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
@@ -359,7 +429,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(homePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         rootPanel.add(homePanel, "home");
@@ -458,7 +528,12 @@ public class GUI extends javax.swing.JFrame {
         cardLayout.show(rootPanel, "main");
     }//GEN-LAST:event_backButton1ActionPerformed
 
+    private void addWebsiteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addWebsiteButtonActionPerformed
+        showAddWebsitePopup();
+    }//GEN-LAST:event_addWebsiteButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addWebsiteButton;
     private javax.swing.JButton backButton;
     private javax.swing.JButton backButton1;
     private javax.swing.JPanel databasePanel;
@@ -476,6 +551,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginEmail;
     private javax.swing.JLabel loginErrorLabel;
@@ -483,6 +559,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel loginPanel;
     private javax.swing.JPasswordField loginPassword;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JTable passwordTable;
     private javax.swing.JButton registerButton;
     private javax.swing.JTextField registerEmail;
     private javax.swing.JLabel registerErrorLabel;

@@ -9,17 +9,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DatabaseManager {
 
     private Connection conn = null;
 
+    /*
     public DatabaseManager(String email) {
         try {
             //Plain text database is stored in memory as it is volatile.
             String url = getDatabaseURL(email);
             conn = DriverManager.getConnection("jdbc:sqlite:" + url);
+            System.out.println("Connection Sucessful.");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    */
+    
+    // Temp
+    public DatabaseManager() {
+        try {
+            //Plain text database is stored in memory as it is volatile.
+            conn = DriverManager.getConnection("jdbc:sqlite:SampleDatabase.db");
             System.out.println("Connection Sucessful.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -86,6 +100,32 @@ public class DatabaseManager {
             System.out.println(ex);
         }
         return success;
+    }
+    
+    public ArrayList<Website> getWebsites() {
+        ArrayList<Website> websites = new ArrayList<>();
+        String sql = "SELECT name,url,username,password FROM passwords";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                String name = rs.getString("name");
+                String url  = rs.getString("url");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                
+                Website website = new Website(name, url, username, password);
+                websites.add(website);
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return websites;
+    }
+    
+    public void addWebsite() {
+        
     }
 
     public PreparedStatement createPreparedStatement(String sql) {
