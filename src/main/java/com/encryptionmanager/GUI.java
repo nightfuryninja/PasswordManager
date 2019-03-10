@@ -15,7 +15,15 @@ public class GUI extends javax.swing.JFrame {
     
     public void showAddWebsitePopup() {
         JPanel panel = new AddWebsitePopup();
-        JOptionPane.showMessageDialog(rootPane, panel, "Add Website", JOptionPane.PLAIN_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(rootPane, panel, "Add Website", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (option == JOptionPane.OK_OPTION) {
+            /* To fix next week
+            String name = panel.getWebsiteName();
+            String url = panel.getUrl();
+            String username = panel.getUsername();
+            String password = panel.getPassword();
+            */
+        }
     }
 
     public GUI() {
