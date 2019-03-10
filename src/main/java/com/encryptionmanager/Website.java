@@ -1,24 +1,14 @@
 package com.encryptionmanager;
 
 public class Website {
-    private String name;
     private String url;
     private String username;
     private String password;
 
-    public Website(String name, String url, String username, String password) {
-        this.name = name;
+    public Website(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUrl() {

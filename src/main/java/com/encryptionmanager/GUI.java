@@ -1,7 +1,5 @@
 package com.encryptionmanager;
 
-
-
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -14,15 +12,13 @@ public class GUI extends javax.swing.JFrame {
     private DatabaseManager db;
     
     public void showAddWebsitePopup() {
-        JPanel panel = new AddWebsitePopup();
+        AddWebsitePopup panel = new AddWebsitePopup();
         int option = JOptionPane.showConfirmDialog(rootPane, panel, "Add Website", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (option == JOptionPane.OK_OPTION) {
-            /* To fix next week
-            String name = panel.getWebsiteName();
-            String url = panel.getUrl();
+            String websiteName = panel.getWebsiteName();
             String username = panel.getUsername();
             String password = panel.getPassword();
-            */
+            db.addWebsite(websiteName, username, password);
         }
     }
 
@@ -38,12 +34,11 @@ public class GUI extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) passwordTable.getModel();
         ArrayList<Website> websites = db.getWebsites();
         for (Website website : websites) {
-            String name = website.getName();
             String url = website.getUrl();
             String username = website.getUsername();
             String password = website.getPassword();
             
-            model.addRow(new Object[]{name, url, username, password});
+            model.addRow(new Object[]{url, username, password});
         }
     }
 
@@ -90,9 +85,6 @@ public class GUI extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         passwordTable = new javax.swing.JTable();
         addWebsiteButton = new javax.swing.JButton();
-        databasePanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        userDetails = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -367,14 +359,14 @@ public class GUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "URL", "Username", "Password"
+                "URL", "Username", "Password"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -392,7 +384,6 @@ public class GUI extends javax.swing.JFrame {
             passwordTable.getColumnModel().getColumn(0).setResizable(false);
             passwordTable.getColumnModel().getColumn(1).setResizable(false);
             passwordTable.getColumnModel().getColumn(2).setResizable(false);
-            passwordTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
         addWebsiteButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -442,30 +433,6 @@ public class GUI extends javax.swing.JFrame {
 
         rootPanel.add(homePanel, "home");
 
-        databasePanel.setLayout(new java.awt.GridBagLayout());
-
-        userDetails.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Website", "Email / Username", "Password"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(userDetails);
-
-        databasePanel.add(jScrollPane1, new java.awt.GridBagConstraints());
-
-        rootPanel.add(databasePanel, "card6");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -489,7 +456,7 @@ public class GUI extends javax.swing.JFrame {
             if (ValidationMethods.isPasswordValid(password)) {
                 System.out.println("Password valid");
 
-                db = new DatabaseManager(email);
+                db = new DatabaseManager();
                 db.register(email, password);
             } else {
                 registerErrorLabel.setText("Invalid password. Please try again.");
@@ -514,12 +481,7 @@ public class GUI extends javax.swing.JFrame {
             loginErrorLabel.setVisible(true);
         }
     }//GEN-LAST:event_loginButtonActionPerformed
-
-    private void loadTableFromDatabase(){
-        DefaultTableModel  model = (DefaultTableModel) userDetails.getModel();
-        
-    }
-    
+   
     private void loginPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageButtonActionPerformed
         cardLayout.show(rootPanel, "login");
     }//GEN-LAST:event_loginPageButtonActionPerformed
@@ -544,7 +506,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton addWebsiteButton;
     private javax.swing.JButton backButton;
     private javax.swing.JButton backButton1;
-    private javax.swing.JPanel databasePanel;
     private javax.swing.JPanel homePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -558,7 +519,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginEmail;
@@ -575,7 +535,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel registerPanel;
     private javax.swing.JPasswordField registerPassword;
     private javax.swing.JPanel rootPanel;
-    private javax.swing.JTable userDetails;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }
