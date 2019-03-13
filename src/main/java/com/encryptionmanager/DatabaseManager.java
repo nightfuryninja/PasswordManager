@@ -1,13 +1,13 @@
 package com.encryptionmanager;
 
-
-
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DatabaseManager {
@@ -16,50 +16,31 @@ public class DatabaseManager {
 
     public DatabaseManager() {
         try {
-            //Plain text database is stored in memory as it is volatile.
-            conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+            conn = DriverManager.getConnection("jdbc:sqlite:SampleDatabase.db");
             System.out.println("Connection Sucessful.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void execute(String sql) {
+    public final String getDatabaseURL(String email) {
+        String URL = System.getenv("APPDATA") + "\\PasswordManager";
+        File file = new File(URL);
+        file.mkdirs();
+        String dbName = EncryptionMethods.hashEmail(email);
+        URL = URL + "\\" + dbName + ".db";
+        return URL;
+    }
+
+    public byte[] register(String email, char[] password) {
         try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
+            PreparedStatement pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS passwords(ID INTEGER Primary Key AUTOINCREMENT, name VARCHAT(255), url VARCHAR(255),username BLOB, password BLOB)");
+            pstmt.execute();
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-    }
-
-    public void backupDatabase() {
-        try {
-            Statement statement = conn.createStatement();
-            statement.execute("backup to backup.db");
-        } catch (SQLException ex) {
-            System.out.println("There is an SQL exception when backing up database.");
-        }
-    }
-
-    public void register(String email, char[] password) {
-        String sql = "CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY,email VARCHAR,password VARBINARY, salt VARBINARY)";
-        String sql2 = "INSERT INTO users(email,password,salt) VALUES(?,?,?)";
-
-        byte[] salt = EncryptionMethods.generateBytes(64);
-        byte[] hashedPassword = EncryptionMethods.hash(password, salt);
-
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
-            PreparedStatement pstmt = conn.prepareStatement(sql2);
-            pstmt.setString(1, email);
-            pstmt.setBytes(2, hashedPassword);
-            pstmt.setBytes(3, salt);
-            pstmt.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
+        byte[] salt = email.getBytes();
+        return EncryptionMethods.hash(password, salt);
     }
 
     public boolean login(String email, char[] password) {
@@ -82,37 +63,39 @@ public class DatabaseManager {
         return success;
     }
 
-    public PreparedStatement createPreparedStatement(String sql) {
-        PreparedStatement pstmt = null;
+    public ArrayList<Website> getWebsites() {
+        ArrayList<Website> websites = new ArrayList<>();
+        String sql = "SELECT name,url,username,password FROM passwords";
         try {
-            pstmt = conn.prepareStatement(sql);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String websiteName = rs.getString("name");
+                String url = rs.getString("url");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+
+                Website website = new Website(websiteName, url, username, password);
+                websites.add(website);
+            }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return pstmt;
+        return websites;
     }
 
-    public void preparedStatementSetString(PreparedStatement pstmt, int index, String value) {
+    //Adds a website to the database. 
+    public void addWebsite(String websiteName, String url, String username, String password) {
         try {
-            pstmt.setString(index, value);
+            PreparedStatement pst = conn.prepareStatement("INSERT INTO passwords (name, url, username, password) VALUES(?, ?, ?, ?)");
+            pst.setString(1, websiteName);
+            pst.setString(2, url);
+            pst.setString(3, username);
+            pst.setString(4, password);
+            pst.executeUpdate();
+            System.out.println("Successfully added to database.");
         } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-    }
-
-    public void preparedStatementSetBytes(PreparedStatement pstmt, int index, byte[] value) {
-        try {
-            pstmt.setBytes(index, value);
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-    }
-
-    public void executePreparedStatement(PreparedStatement pstmt) {
-        try {
-            pstmt.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -123,19 +106,6 @@ public class DatabaseManager {
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-        }
-    }
-
-    //Inserts a new row of account data into the database.
-    public void insertRow(String[] args) {
-        String command = String.format("INSERT INTO accounts(website, username, password) "
-                + "VALUES({0}, {1}, {2})", args);
-        try {
-            Statement statement = conn.createStatement();
-            statement.execute(command);
-            System.out.println("Inserted new data into the database.");
-        } catch (SQLException ex) {
-            System.out.println("A problem with SQL occured.");
         }
     }
 

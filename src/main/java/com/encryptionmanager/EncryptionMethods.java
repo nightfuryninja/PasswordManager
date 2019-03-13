@@ -1,8 +1,5 @@
 package com.encryptionmanager;
 
-
-
-import java.security.InvalidAlgorithmParameterException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import javax.crypto.Cipher;
@@ -11,16 +8,10 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.spec.InvalidKeySpecException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class EncryptionMethods {
 
-    //!!!!!!!!! HMAC ENCRYPTION !!!!!!!!!
-    
     public static SecureRandom generator = new SecureRandom();
 
     //Generates a secure random byte array.
@@ -30,57 +21,41 @@ public class EncryptionMethods {
         return secureBytes;
     }
 
-    //Encryptes data using AES with a specific key.
-    public static byte[] AESEncrypt(byte[] key, byte[] data) {
+    public static byte[] AESEncrypt(byte[] key, byte[] initVector, byte[] data) {
         try {
-            //We need to create an initizalization vector.
-            IvParameterSpec IVSpec = new IvParameterSpec(generateBytes(16));
-            //First 16 bytes of file will be IV.
-            SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-            //Use CBC so each block is different.
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");            
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec, IVSpec);
-            //First 16 bytes must be IV
-            return cipher.doFinal(data);
-        } catch(NoSuchAlgorithmException ex){
-            System.out.println("That algorithm doesn't exist.");
-        } catch(NoSuchPaddingException ex){
-            System.out.println("That padding doesn't exist.");
-        } catch (InvalidKeyException ex){
-            System.out.println("Invalid key.");
-        } catch (InvalidAlgorithmParameterException ex){
-            System.out.println("Invalid algorithm");
-        } catch(IllegalBlockSizeException ex){
-            System.out.println("That is an illegal block size.");
-        } catch (BadPaddingException ex){
-            System.out.println("Bad padding. Please try again.");
+            if(initVector == null){
+                initVector = generateBytes(16);
+            }
+            IvParameterSpec iv = new IvParameterSpec(initVector);
+            SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+            byte[] encrypted = cipher.doFinal(data);
+            byte[] returnData = new byte[iv.getIV().length + encrypted.length];
+            System.arraycopy(iv.getIV(), 0, returnData, 0, iv.getIV().length);
+            System.arraycopy(encrypted, 0, returnData, iv.getIV().length, encrypted.length);
+            return returnData;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return null;
     }
 
-    //Decrypts data using AES with a speciic key.
-    public static byte[] AESDecrypt(byte[] key, byte[] IV,  byte[] data) {
-        //We should only ever decrypt to memory (seeing as it is volatile).
-        SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-        //The IV parameter is first 16 bytes in the file.
-        IvParameterSpec IVSpect = new IvParameterSpec(IV);
-        try{
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, keySpec, IVSpect);
-        //Everything after position 15 in data.
-        return cipher.doFinal(data);
-        } catch (NoSuchAlgorithmException ex){
-            System.out.println("That encryption algorithm does not exist.");
-        } catch (NoSuchPaddingException ex){
-            System.out.println("That padding does not exist.");
-        } catch(InvalidKeyException ex){
-            System.out.println("That is an invalid key.");
-        } catch (InvalidAlgorithmParameterException ex){
-            System.out.println("Invalid algorith parameter.");
-        } catch (IllegalBlockSizeException ex){
-            System.out.println("Block size invalid. Something went wrong.");
-        } catch (BadPaddingException ex){
-            System.out.println("Bad padding exception.");
+    public static byte[] AESDecrypt(byte[] key, byte[] initVector, byte[] encrypted) {
+        try {
+            if(initVector == null){
+                initVector = new byte[16];
+                System.arraycopy(encrypted, 0, initVector, 0, 16);
+            }
+            IvParameterSpec iv = new IvParameterSpec(initVector);
+            SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+            byte[] original = cipher.doFinal(encrypted);
+            return original;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return null;
     }
@@ -93,7 +68,7 @@ public class EncryptionMethods {
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             return keyFactory.generateSecret(keySpec).getEncoded();
         } catch (NoSuchAlgorithmException ex) {
-            System.out.println("Sorry, that encryption algorith doesn't exist.");
+            System.out.println("Sorry, that encryption algorithm doesn't exist.");
             return null;
         } catch (InvalidKeySpecException ex) {
             System.out.println("Sorry, that is an invalid key specification.");
@@ -105,6 +80,25 @@ public class EncryptionMethods {
     public static void generatePassword(int length) {
         byte[] passwordBytes = generateBytes(length);
         System.out.println(Arrays.toString(passwordBytes));
+    }
+
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+            builder.append(String.format("%02x", b));
+        }
+        String hexString = builder.toString();
+        return hexString;
+    }
+
+    public static String hashEmail(String email) {
+        String[] emailArray = email.split("@");
+        char[] username = emailArray[0].toCharArray();
+        byte[] domain = emailArray[1].getBytes();
+        byte[] hashedEmailBytes = hash(username, domain);
+        String hashedEmailHex = bytesToHex(hashedEmailBytes);
+
+        return hashedEmailHex;
     }
 
 }
