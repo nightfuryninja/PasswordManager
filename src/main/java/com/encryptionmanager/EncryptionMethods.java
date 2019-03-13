@@ -23,12 +23,18 @@ public class EncryptionMethods {
 
     public static byte[] AESEncrypt(byte[] key, byte[] initVector, byte[] data) {
         try {
+            if(initVector == null){
+                initVector = generateBytes(16);
+            }
             IvParameterSpec iv = new IvParameterSpec(initVector);
             SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
             byte[] encrypted = cipher.doFinal(data);
-            return encrypted;
+            byte[] returnData = new byte[iv.getIV().length + encrypted.length];
+            System.arraycopy(iv.getIV(), 0, returnData, 0, iv.getIV().length);
+            System.arraycopy(encrypted, 0, returnData, iv.getIV().length, encrypted.length);
+            return returnData;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -37,14 +43,16 @@ public class EncryptionMethods {
 
     public static byte[] AESDecrypt(byte[] key, byte[] initVector, byte[] encrypted) {
         try {
+            if(initVector == null){
+                initVector = new byte[16];
+                System.arraycopy(encrypted, 0, initVector, 0, 16);
+            }
             IvParameterSpec iv = new IvParameterSpec(initVector);
             SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
-
             byte[] original = cipher.doFinal(encrypted);
-
             return original;
         } catch (Exception ex) {
             ex.printStackTrace();

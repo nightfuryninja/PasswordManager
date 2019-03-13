@@ -32,16 +32,15 @@ public class DatabaseManager {
         return URL;
     }
 
-    public void register(String email, char[] password) {
-
-        byte[] salt = email.getBytes();
-        byte[] hashedPassword = EncryptionMethods.hash(password, salt);
+    public byte[] register(String email, char[] password) {
         try {
-            PreparedStatement pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS passwords(ID INTEGER Primary Key AUTOINCREMENT, name VARCHAT(255), url VARCHAR(255),username VARCHAR(255),password VARCHAR(255))");
+            PreparedStatement pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS passwords(ID INTEGER Primary Key AUTOINCREMENT, name VARCHAT(255), url VARCHAR(255),username BLOB, password BLOB)");
             pstmt.execute();
         } catch (SQLException ex) {
             System.out.println(ex);
         }
+        byte[] salt = email.getBytes();
+        return EncryptionMethods.hash(password, salt);
     }
 
     public boolean login(String email, char[] password) {
@@ -76,7 +75,7 @@ public class DatabaseManager {
                 String username = rs.getString("username");
                 String password = rs.getString("password");
 
-                Website website = new Website(websiteName,url, username, password);
+                Website website = new Website(websiteName, url, username, password);
                 websites.add(website);
             }
         } catch (SQLException ex) {
