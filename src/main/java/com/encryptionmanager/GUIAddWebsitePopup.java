@@ -1,8 +1,8 @@
 package com.encryptionmanager;
 
-public class AddWebsitePopup extends javax.swing.JPanel {
+public class GUIAddWebsitePopup extends javax.swing.JPanel {
 
-    public AddWebsitePopup() {
+    public GUIAddWebsitePopup() {
         initComponents();
     }
     

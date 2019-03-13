@@ -10,36 +10,17 @@ public class GUI extends javax.swing.JFrame {
 
     public CardLayout cardLayout;
     private DatabaseManager db;
-    
-    public void showAddWebsitePopup() {
-        AddWebsitePopup panel = new AddWebsitePopup();
-        int option = JOptionPane.showConfirmDialog(rootPane, panel, "Add Website", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (option == JOptionPane.OK_OPTION) {
-            String websiteName = panel.getWebsiteName();
-            String username = panel.getUsername();
-            String password = panel.getPassword();
-            db.addWebsite(websiteName, username, password);
-        }
-    }
 
     public GUI() {
         initComponents();
         cardLayout = (CardLayout) rootPanel.getLayout(); // Get card layout
         loginErrorLabel.setVisible(false); // Hide error label on login page
         registerErrorLabel.setVisible(false); // Hide error label on register page
-        
+
         // Temp
         cardLayout.show(rootPanel, "home");
         db = new DatabaseManager();
-        DefaultTableModel model = (DefaultTableModel) passwordTable.getModel();
-        ArrayList<Website> websites = db.getWebsites();
-        for (Website website : websites) {
-            String url = website.getUrl();
-            String username = website.getUsername();
-            String password = website.getPassword();
-            
-            model.addRow(new Object[]{url, username, password});
-        }
+        updateAccountTable();
     }
 
     /**
@@ -359,14 +340,14 @@ public class GUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "URL", "Username", "Password"
+                "Name", "URL", "Username", "Password"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -384,6 +365,7 @@ public class GUI extends javax.swing.JFrame {
             passwordTable.getColumnModel().getColumn(0).setResizable(false);
             passwordTable.getColumnModel().getColumn(1).setResizable(false);
             passwordTable.getColumnModel().getColumn(2).setResizable(false);
+            passwordTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
         addWebsiteButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -481,7 +463,7 @@ public class GUI extends javax.swing.JFrame {
             loginErrorLabel.setVisible(true);
         }
     }//GEN-LAST:event_loginButtonActionPerformed
-   
+
     private void loginPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageButtonActionPerformed
         cardLayout.show(rootPanel, "login");
     }//GEN-LAST:event_loginPageButtonActionPerformed
@@ -500,7 +482,36 @@ public class GUI extends javax.swing.JFrame {
 
     private void addWebsiteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addWebsiteButtonActionPerformed
         showAddWebsitePopup();
+        updateAccountTable();
     }//GEN-LAST:event_addWebsiteButtonActionPerformed
+
+    public void showAddWebsitePopup() {
+        GUIAddWebsitePopup panel = new GUIAddWebsitePopup();
+        int option = JOptionPane.showConfirmDialog(rootPane, panel, "Add Website", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (option == JOptionPane.OK_OPTION) {
+            String websiteName = panel.getWebsiteName();
+            String url = panel.getUrl();
+            String username = panel.getUsername();
+            String password = panel.getPassword();
+            db.addWebsite(websiteName, url, username, password);
+        }
+        updateAccountTable();
+    }
+    
+    //Updates the (homePanel) account table.
+    private void updateAccountTable() {
+        DefaultTableModel model = (DefaultTableModel) passwordTable.getModel();
+        model.setRowCount(0);
+        ArrayList<Website> websites = db.getWebsites();
+        for (Website website : websites) {
+            String name = website.getWebsiteName();
+            String url = website.getUrl();
+            String username = website.getUsername();
+            String password = website.getPassword();
+
+            model.addRow(new Object[]{name, url, username, password});
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addWebsiteButton;

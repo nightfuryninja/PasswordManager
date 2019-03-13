@@ -1,7 +1,6 @@
 package com.encryptionmanager;
 
 import java.io.File;
-import java.text.MessageFormat;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -34,13 +33,12 @@ public class DatabaseManager {
     }
 
     public void register(String email, char[] password) {
-        String sql = "CREATE TABLE IF NOT EXISTS passwords(ID INTEGER Primary Key AUTOINCREMENT, url VARCHAR(255),username VARCHAR(255),password VARCHAR(255))";
 
         byte[] salt = email.getBytes();
         byte[] hashedPassword = EncryptionMethods.hash(password, salt);
         try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
+            PreparedStatement pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS passwords(ID INTEGER Primary Key AUTOINCREMENT, name VARCHAT(255), url VARCHAR(255),username VARCHAR(255),password VARCHAR(255))");
+            pstmt.execute();
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -68,16 +66,17 @@ public class DatabaseManager {
 
     public ArrayList<Website> getWebsites() {
         ArrayList<Website> websites = new ArrayList<>();
-        String sql = "SELECT url,username,password FROM passwords";
+        String sql = "SELECT name,url,username,password FROM passwords";
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
+                String websiteName = rs.getString("name");
                 String url = rs.getString("url");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
 
-                Website website = new Website(url, username, password);
+                Website website = new Website(websiteName,url, username, password);
                 websites.add(website);
             }
         } catch (SQLException ex) {
@@ -87,27 +86,18 @@ public class DatabaseManager {
     }
 
     //Adds a website to the database. 
-    public void addWebsite(String name, String username, String password) {
+    public void addWebsite(String websiteName, String url, String username, String password) {
         try {
-            PreparedStatement pst = conn.prepareStatement("INSERT INTO passwords (url, username, password) VALUES(?, ?, ?)");
-            pst.setString(1, name);
-            pst.setString(2, username);
-            pst.setString(3, password);
-            pst.executeUpdate();            
+            PreparedStatement pst = conn.prepareStatement("INSERT INTO passwords (name, url, username, password) VALUES(?, ?, ?, ?)");
+            pst.setString(1, websiteName);
+            pst.setString(2, url);
+            pst.setString(3, username);
+            pst.setString(4, password);
+            pst.executeUpdate();
             System.out.println("Successfully added to database.");
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-    }
-
-    public PreparedStatement createPreparedStatement(String sql) {
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement(sql);
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-        return pstmt;
     }
 
     public void close() {

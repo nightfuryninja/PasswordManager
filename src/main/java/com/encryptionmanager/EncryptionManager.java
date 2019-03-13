@@ -2,10 +2,6 @@ package com.encryptionmanager;
 
 public class EncryptionManager {
 
-    //TODO LIST:
-    //1) Create option for password to contain different characters.
-    //2) Store passwords within an encrypted database.
-    //3) Create a pretty GUI that looks all fancy and modern.
     public static void main(String[] args) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
