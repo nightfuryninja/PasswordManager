@@ -21,6 +21,8 @@ public class EncryptionMethods {
         return secureBytes;
     }
 
+    //AES Encrypts provided data via a key. Does not require an IV, 
+    //which will be generated and returned with the data.
     public static byte[] AESEncrypt(byte[] key, byte[] initVector, byte[] data) {
         try {
             if(initVector == null){
@@ -41,6 +43,8 @@ public class EncryptionMethods {
         return null;
     }
 
+    //AES Decrypts provided data via a key. Does not require initVector parameter,
+    //assuming that the first 16 bytes in the data represents the IV.
     public static byte[] AESDecrypt(byte[] key, byte[] initVector, byte[] encrypted) {
         try {
             if(initVector == null){
@@ -82,6 +86,7 @@ public class EncryptionMethods {
         System.out.println(Arrays.toString(passwordBytes));
     }
 
+    //Converts bytes to hexadecimal.
     public static String bytesToHex(byte[] bytes) {
         StringBuilder builder = new StringBuilder();
         for (byte b : bytes) {

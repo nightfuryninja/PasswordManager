@@ -63,6 +63,7 @@ public class DatabaseManager {
         return success;
     }
 
+    //Gets all the websites stored in the database and returns a list of Websites (object).
     public ArrayList<Website> getWebsites() {
         ArrayList<Website> websites = new ArrayList<>();
         String sql = "SELECT name,url,username,password FROM passwords";
@@ -98,6 +99,7 @@ public class DatabaseManager {
         }
     }
 
+    //Closes the connection to the database.
     public void close() {
         try {
             if (conn != null) {
