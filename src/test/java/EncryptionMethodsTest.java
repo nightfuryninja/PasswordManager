@@ -2,7 +2,6 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 import com.encryptionmanager.EncryptionMethods;
-import java.util.Arrays;
 
 public class EncryptionMethodsTest {
 

@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,6 +31,7 @@ public class DatabaseManager {
         return URL;
     }
 
+    //Creates a new table to store the users passwords.
     public byte[] register(String email, char[] password) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS passwords(ID INTEGER Primary Key AUTOINCREMENT, name VARCHAT(255), url VARCHAR(255),username BLOB, password BLOB)");
@@ -66,10 +66,9 @@ public class DatabaseManager {
     //Gets all the websites stored in the database and returns a list of Websites (object).
     public ArrayList<Website> getWebsites() {
         ArrayList<Website> websites = new ArrayList<>();
-        String sql = "SELECT name,url,username,password FROM passwords";
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+            PreparedStatement pstmt = conn.prepareStatement("SELECT name,url,username,password FROM passwords");
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String websiteName = rs.getString("name");
                 String url = rs.getString("url");
@@ -112,10 +111,9 @@ public class DatabaseManager {
 
     //Updates an existing row (using ID) in the database.
     public void updateRow(String[] args) {
-        String command = String.format("UPDATE accounts SET {0} = {1} WHERE id  = {3};", args);
         try {
-            Statement statement = conn.createStatement();
-            statement.execute(command);
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE accounts SET ? = ? WHERE id  = ?");
+            pstmt.execute();
             System.out.println("Updated");
         } catch (SQLException ex) {
             System.out.println("An SQL exception occured.");

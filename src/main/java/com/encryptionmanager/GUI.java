@@ -3,7 +3,6 @@ package com.encryptionmanager;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
 public class GUI extends javax.swing.JFrame {
@@ -450,22 +449,22 @@ public class GUI extends javax.swing.JFrame {
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         String email = registerEmail.getText();
         char[] password = registerPassword.getPassword();
-
-        if (ValidationMethods.isEmailValid(email)) {
-            System.out.println("Email valid");
-            if (ValidationMethods.isPasswordValid(password)) {
-                System.out.println("Password valid");
-
-                db = new DatabaseManager();
-                key = db.register(email, password);
-            } else {
-                registerErrorLabel.setText("Invalid password. Please try again.");
-                registerErrorLabel.setVisible(true);
-            }
-        } else {
-            registerErrorLabel.setText("Invalid email address. Please try again.");
-            registerErrorLabel.setVisible(true);
-        }
+        db = new DatabaseManager();
+        key = db.register(email, password);
+        cardLayout.show(rootPanel, "home");
+//        if (ValidationMethods.isEmailValid(email)) {
+//            System.out.println("Email valid");
+//            if (ValidationMethods.isPasswordValid(password)) {
+//                System.out.println("Password valid");
+//
+//            } else {
+//                registerErrorLabel.setText("Invalid password. Please try again.");
+//                registerErrorLabel.setVisible(true);
+//            }
+//        } else {
+//            registerErrorLabel.setText("Invalid email address. Please try again.");
+//            registerErrorLabel.setVisible(true);
+//        }
 
     }//GEN-LAST:event_registerButtonActionPerformed
 
@@ -511,12 +510,12 @@ public class GUI extends javax.swing.JFrame {
             String websiteName = panel.getWebsiteName();
             String url = panel.getUrl();
             byte[] username = EncryptionMethods.AESEncrypt(key, null, panel.getUsername().getBytes());
-            byte[] password = EncryptionMethods.AESDecrypt(key, null, panel.getPassword().getBytes());
+            byte[] password = EncryptionMethods.AESEncrypt(key, null, panel.getPassword().getBytes());
             db.addWebsite(websiteName, url, username, password);
         }
         updateAccountTable();
     }
-    
+
     //Updates the (homePanel) account table.
     private void updateAccountTable() {
         DefaultTableModel model = (DefaultTableModel) passwordTable.getModel();
