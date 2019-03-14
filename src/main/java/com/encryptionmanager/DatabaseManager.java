@@ -72,9 +72,8 @@ public class DatabaseManager {
             while (rs.next()) {
                 String websiteName = rs.getString("name");
                 String url = rs.getString("url");
-                String username = rs.getString("username");
-                String password = rs.getString("password");
-
+                byte[] username = rs.getBytes("username");
+                byte[] password = rs.getBytes("password");
                 Website website = new Website(websiteName, url, username, password);
                 websites.add(website);
             }
@@ -85,13 +84,13 @@ public class DatabaseManager {
     }
 
     //Adds a website to the database. 
-    public void addWebsite(String websiteName, String url, String username, String password) {
+    public void addWebsite(String websiteName, String url, byte[] username, byte[] password) {
         try {
             PreparedStatement pst = conn.prepareStatement("INSERT INTO passwords (name, url, username, password) VALUES(?, ?, ?, ?)");
             pst.setString(1, websiteName);
             pst.setString(2, url);
-            pst.setString(3, username);
-            pst.setString(4, password);
+            pst.setBytes(3, username);
+            pst.setBytes(4, password);
             pst.executeUpdate();
             System.out.println("Successfully added to database.");
         } catch (SQLException ex) {

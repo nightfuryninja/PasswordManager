@@ -4,10 +4,10 @@ public class Website {
     
     private String websiteName;
     private String url;
-    private String username;
-    private String password;
+    private byte[] username;
+    private byte[] password;
 
-    public Website(String websiteName, String url, String username, String password) {
+    public Website(String websiteName, String url, byte[] username, byte[] password) {
         this.websiteName = websiteName;
         this.url = url;
         this.username = username;
@@ -30,19 +30,19 @@ public class Website {
         this.url = url;
     }
 
-    public String getUsername() {
+    public byte[] getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(byte[] username) {
         this.username = username;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(byte[] password) {
         this.password = password;
     }
     

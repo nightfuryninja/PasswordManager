@@ -10,17 +10,13 @@ public class GUI extends javax.swing.JFrame {
 
     public CardLayout cardLayout;
     private DatabaseManager db;
+    private byte[] key;
 
     public GUI() {
         initComponents();
         cardLayout = (CardLayout) rootPanel.getLayout(); // Get card layout
         loginErrorLabel.setVisible(false); // Hide error label on login page
         registerErrorLabel.setVisible(false); // Hide error label on register page
-
-        // Temp
-        cardLayout.show(rootPanel, "home");
-        db = new DatabaseManager();
-        updateAccountTable();
     }
 
     /**
@@ -47,11 +43,11 @@ public class GUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         loginEmail = new javax.swing.JTextField();
         loginPassword = new javax.swing.JPasswordField();
-        loginButton = new javax.swing.JButton();
         loginErrorLabel = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        loginButton = new javax.swing.JButton();
         registerPanel = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        backButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -59,6 +55,8 @@ public class GUI extends javax.swing.JFrame {
         registerPassword = new javax.swing.JPasswordField();
         registerButton = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        backButton = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
         registerErrorLabel = new javax.swing.JLabel();
         homePanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -140,7 +138,11 @@ public class GUI extends javax.swing.JFrame {
                 backButton1ActionPerformed(evt);
             }
         });
-        jPanel4.add(backButton1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel4.add(backButton1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Password:");
@@ -151,14 +153,6 @@ public class GUI extends javax.swing.JFrame {
         loginEmail.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         loginPassword.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-
-        loginButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        loginButton.setText("Login");
-        loginButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginButtonActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -175,10 +169,7 @@ public class GUI extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loginPassword))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(loginButton)))
+                        .addComponent(loginPassword)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -192,13 +183,12 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
                     .addComponent(loginPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(loginButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel4.add(jPanel1, gridBagConstraints);
@@ -209,9 +199,30 @@ public class GUI extends javax.swing.JFrame {
         loginErrorLabel.setPreferredSize(new java.awt.Dimension(424, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel4.add(loginErrorLabel, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel8.setText("Login");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel4.add(jLabel8, gridBagConstraints);
+
+        loginButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        loginButton.setText("Login");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        jPanel4.add(loginButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -225,26 +236,13 @@ public class GUI extends javax.swing.JFrame {
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        backButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        backButton.setText("Back");
-        backButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel5.add(backButton, gridBagConstraints);
-
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Password:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 18;
         gridBagConstraints.ipady = 7;
@@ -255,8 +253,8 @@ public class GUI extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Email:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 51;
         gridBagConstraints.ipady = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -265,8 +263,8 @@ public class GUI extends javax.swing.JFrame {
 
         registerEmail.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 293;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 4, 0, 10);
@@ -274,8 +272,8 @@ public class GUI extends javax.swing.JFrame {
 
         registerPassword.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 293;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 4, 0, 10);
@@ -289,10 +287,9 @@ public class GUI extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         jPanel3.add(registerButton, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -300,11 +297,32 @@ public class GUI extends javax.swing.JFrame {
         jLabel6.setText("<html>(Must be at least 8 characters long and contain a number,<br>lower case letter, upper case letter and special character)</html>");
         jLabel6.setPreferredSize(new java.awt.Dimension(840, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = -534;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel3.add(jLabel6, gridBagConstraints);
+
+        backButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        jPanel3.add(backButton, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel7.setText("Register");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(jLabel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -325,7 +343,7 @@ public class GUI extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         registerPanel.add(jPanel5, gridBagConstraints);
 
@@ -439,7 +457,7 @@ public class GUI extends javax.swing.JFrame {
                 System.out.println("Password valid");
 
                 db = new DatabaseManager();
-                db.register(email, password);
+                key = db.register(email, password);
             } else {
                 registerErrorLabel.setText("Invalid password. Please try again.");
                 registerErrorLabel.setVisible(true);
@@ -485,14 +503,15 @@ public class GUI extends javax.swing.JFrame {
         updateAccountTable();
     }//GEN-LAST:event_addWebsiteButtonActionPerformed
 
+    //Called when the addWebsiteButton is pressed.
     public void showAddWebsitePopup() {
         GUIAddWebsitePopup panel = new GUIAddWebsitePopup();
         int option = JOptionPane.showConfirmDialog(rootPane, panel, "Add Website", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (option == JOptionPane.OK_OPTION) {
             String websiteName = panel.getWebsiteName();
             String url = panel.getUrl();
-            String username = panel.getUsername();
-            String password = panel.getPassword();
+            byte[] username = EncryptionMethods.AESEncrypt(key, null, panel.getUsername().getBytes());
+            byte[] password = EncryptionMethods.AESDecrypt(key, null, panel.getPassword().getBytes());
             db.addWebsite(websiteName, url, username, password);
         }
         updateAccountTable();
@@ -506,10 +525,9 @@ public class GUI extends javax.swing.JFrame {
         for (Website website : websites) {
             String name = website.getWebsiteName();
             String url = website.getUrl();
-            String username = website.getUsername();
-            String password = website.getPassword();
-
-            model.addRow(new Object[]{name, url, username, password});
+            byte[] username = EncryptionMethods.AESDecrypt(key, null, website.getUsername());
+            byte[] password = EncryptionMethods.AESDecrypt(key, null, website.getPassword());
+            model.addRow(new Object[]{name, url, new String(username), new String(password)});
         }
     }
 
@@ -524,6 +542,8 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
