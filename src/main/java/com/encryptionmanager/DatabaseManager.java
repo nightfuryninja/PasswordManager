@@ -6,17 +6,22 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DatabaseManager {
 
     private Connection conn = null;
 
-    public DatabaseManager() {
+    public DatabaseManager(String email) {
+        String dbURL = getDatabaseURL(email);
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite:SampleDatabase.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:" + dbURL);
             System.out.println("Connection Sucessful.");
+            
+            String sql = "CREATE TABLE IF NOT EXISTS passwords(id INTEGER PRIMARY KEY AUTOINCREMENT,name VARCHAR(255),url VARCHAR(255),username BLOB,password BLOB)";
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -32,6 +37,7 @@ public class DatabaseManager {
     }
 
     //Creates a new table to store the users passwords.
+    /*
     public byte[] register(String email, char[] password) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS passwords(ID INTEGER Primary Key AUTOINCREMENT, name VARCHAT(255), url VARCHAR(255),username BLOB, password BLOB)");
@@ -42,26 +48,7 @@ public class DatabaseManager {
         byte[] salt = email.getBytes();
         return EncryptionMethods.hash(password, salt);
     }
-
-    public boolean login(String email, char[] password) {
-        boolean success = false;
-        String sql = "SELECT password,salt FROM users WHERE email=?";
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                byte[] hashedPassword = rs.getBytes("password");
-                byte[] salt = rs.getBytes("salt");
-                if (Arrays.equals(EncryptionMethods.hash(password, salt), hashedPassword)) {
-                    success = true;
-                }
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-        return success;
-    }
+    */
 
     //Gets all the websites stored in the database and returns a list of Websites (object).
     public ArrayList<Website> getWebsites() {

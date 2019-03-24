@@ -449,32 +449,37 @@ public class GUI extends javax.swing.JFrame {
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         String email = registerEmail.getText();
         char[] password = registerPassword.getPassword();
-        db = new DatabaseManager();
-        key = db.register(email, password);
+        Users mainDB = new Users(); 
+        mainDB.register(email, password);
+        db = new DatabaseManager(email);
+        key = mainDB.getKey(email);
         cardLayout.show(rootPanel, "home");
-//        if (ValidationMethods.isEmailValid(email)) {
-//            System.out.println("Email valid");
-//            if (ValidationMethods.isPasswordValid(password)) {
-//                System.out.println("Password valid");
-//
-//            } else {
-//                registerErrorLabel.setText("Invalid password. Please try again.");
-//                registerErrorLabel.setVisible(true);
-//            }
-//        } else {
-//            registerErrorLabel.setText("Invalid email address. Please try again.");
-//            registerErrorLabel.setVisible(true);
-//        }
+        if (ValidationMethods.isEmailValid(email)) {
+            System.out.println("Email valid");
+            if (ValidationMethods.isPasswordValid(password)) {
+                System.out.println("Password valid");
+
+            } else {
+                registerErrorLabel.setText("Invalid password. Please try again.");
+                registerErrorLabel.setVisible(true);
+            }
+        } else {
+            registerErrorLabel.setText("Invalid email address. Please try again.");
+            registerErrorLabel.setVisible(true);
+        }
 
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String email = loginEmail.getText();
         char[] password = loginPassword.getPassword();
-        DatabaseManager db = new DatabaseManager();
-        boolean success = db.login(email, password);
+        Users mainDB = new Users();
+        boolean success = mainDB.login(email, password);
         if (success) {
+            db = new DatabaseManager(email);
+            key = mainDB.getKey(email);
             cardLayout.show(rootPanel, "home");
+            updateAccountTable();
         } else {
             loginErrorLabel.setText("Incorrect email/password. Please try again.");
             loginErrorLabel.setVisible(true);
@@ -499,7 +504,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void addWebsiteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addWebsiteButtonActionPerformed
         showAddWebsitePopup();
-        updateAccountTable();
+        //updateAccountTable();
     }//GEN-LAST:event_addWebsiteButtonActionPerformed
 
     //Called when the addWebsiteButton is pressed.
